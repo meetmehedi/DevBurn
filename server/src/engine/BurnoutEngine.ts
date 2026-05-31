@@ -2,6 +2,7 @@ export interface DeveloperActivity {
   commits: number;
   offHourCommits: number;
   weekendCommits: number;
+  aiAssistedCommits: number;
   workloadSpikes: number;
   sentimentScore: number;     // 0-1 (higher = more positive)
   recentPRs: number;
@@ -71,6 +72,11 @@ export class BurnoutEngine {
     let riskLevel: 'Low' | 'Medium' | 'High' = 'Low';
     let recommendation = 'Healthy signals detected. Maintain current pace and encourage regular breaks.';
     const indicators: string[] = [];
+
+    const aiRatio = activity.aiAssistedCommits / totalCommits;
+    if (aiRatio > 0.15) {
+      indicators.push(`AI Assistance: ${Math.round(aiRatio * 100)}% of commits contain auto-generated/Copilot patterns`);
+    }
 
     if (breakdown.offHourScore >= 15) {
       indicators.push(`High off-hour activity (${Math.round(offHourRatio * 100)}% commits outside work hours)`);

@@ -320,9 +320,6 @@ function scoreFactorBox(title: string, weight: string, color: string, desc: stri
 function developerReportCard(member: any): string {
   const { prediction, name, stats } = member;
   const riskColor = prediction.riskLevel === 'High' ? '#ef4444' : prediction.riskLevel === 'Medium' ? '#f59e0b' : '#22c55e';
-  const bd = prediction.breakdown || {};
-  const topSignal = Object.entries(bd as Record<string, number>)
-    .sort(([,a], [,b]) => (b as number) - (a as number))[0];
 
   const offHourPct = stats.commits > 0 ? Math.round(((stats.offHourCommits + stats.weekendCommits) / stats.commits) * 100) : 0;
 
@@ -335,7 +332,7 @@ function developerReportCard(member: any): string {
       <div>
         <div style="font-weight:700;font-size:1rem">${name}</div>
         <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem">
-          ${stats.commits} commits &nbsp;·&nbsp; ${offHourPct}% off-hour &nbsp;·&nbsp; ${stats.recentPRs} PRs &nbsp;·&nbsp; ${(stats.codeChurn || 0).toLocaleString()} lines changed
+          ${stats.commits} commits &nbsp;·&nbsp; ${offHourPct}% off-hour &nbsp;·&nbsp; ${stats.aiAssistedCommits || 0} AI-assisted &nbsp;·&nbsp; ${stats.recentPRs} PRs &nbsp;·&nbsp; ${(stats.codeChurn || 0).toLocaleString()} lines changed
         </div>
         <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem">
           <strong style="color:#fff">Signals:</strong> ${prediction.indicators.join(' · ') || 'None'}
@@ -509,6 +506,7 @@ function renderDashboardResults(members: any[]) {
           <span>📝 <strong>${(stats.codeChurn || 0).toLocaleString()}</strong> lines changed</span>
           <span>⏱ Avg PR close: <strong>${stats.avgPRCloseHours ? stats.avgPRCloseHours + 'h' : 'N/A'}</strong></span>
           <span>✅ <strong>${stats.mergedPRs || 0}</strong> merged</span>
+          <span>🤖 <strong>${stats.aiAssistedCommits || 0}</strong> AI-assisted</span>
         </div>
         ${history.length > 0 ? `
         <div>
