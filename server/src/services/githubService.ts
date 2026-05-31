@@ -74,15 +74,18 @@ export class GithubService {
 
   // ─── Helpers ────────────────────────────────────────────────────────────────
 
-  /** Determine if a UTC commit hour is "off hours" (before 8am or after 7pm) */
+  /** Determine if a commit hour in Bangladesh Time (UTC+6) is "off hours" (before 9am or after 6pm) */
   private isOffHour(date: Date): boolean {
-    const hour = date.getUTCHours();
-    return hour < 8 || hour >= 19;
+    const bdDate = new Date(date.getTime() + 6 * 60 * 60 * 1000);
+    const hour = bdDate.getUTCHours();
+    return hour < 9 || hour >= 18;
   }
 
+  /** Determine if a date falls on Bangladesh weekend (Friday or Saturday) */
   private isWeekend(date: Date): boolean {
-    const day = date.getUTCDay();
-    return day === 0 || day === 6;
+    const bdDate = new Date(date.getTime() + 6 * 60 * 60 * 1000);
+    const day = bdDate.getUTCDay();
+    return day === 5 || day === 6; // Friday (5) and Saturday (6)
   }
 
   /** Detect weeks where a developer committed more than 2× their own weekly average */

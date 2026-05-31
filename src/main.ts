@@ -191,7 +191,7 @@ function renderReportView(container: Element, data: { owner: string; repo: strin
 
   // Data sources section
   const dataSources = [
-    { icon: '📝', name: 'Commit History', endpoint: `/repos/${owner}/${repo}/commits`, description: 'Timestamps analyzed for off-hour (before 8am / after 7pm UTC) and weekend activity patterns.', collected: members.reduce((s, m) => s + (m.stats.commits || 0), 0) + ' commits' },
+    { icon: '📝', name: 'Commit History', endpoint: `/repos/${owner}/${repo}/commits`, description: 'Timestamps analyzed for off-hour (before 9am / after 6pm Bangladesh Time) and weekend (Friday & Saturday) activity patterns.', collected: members.reduce((s, m) => s + (m.stats.commits || 0), 0) + ' commits' },
     { icon: '🔀', name: 'Pull Requests', endpoint: `/repos/${owner}/${repo}/pulls?state=all`, description: 'PR open/close times used to compute turnaround pressure and merge rates.', collected: members.reduce((s, m) => s + (m.stats.recentPRs || 0), 0) + ' PRs' },
     { icon: '💬', name: 'PR Review Comments', endpoint: `/repos/${owner}/${repo}/pulls/:n/comments`, description: 'Raw comment text scanned for stress/positive keywords as a sentiment proxy.', collected: 'Sampled from first 20 PRs' },
     { icon: '📊', name: 'Weekly Contributor Stats', endpoint: `/repos/${owner}/${repo}/stats/contributors`, description: '12-week per-contributor commit, addition, and deletion history for workload spike detection.', collected: members.length + ' contributors' },
@@ -283,7 +283,7 @@ function renderReportView(container: Element, data: { owner: string; repo: strin
       <div class="glass" style="padding:1.5rem;margin-bottom:2rem">
         <h2 style="font-size:1.1rem;margin-bottom:1rem">📖 How the Risk Score Is Calculated</h2>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.75rem">
-          ${scoreFactorBox('Off-Hour Activity', '25 pts', '#f59e0b', 'Ratio of commits made before 8am or after 7pm UTC, including weekends.')}
+          ${scoreFactorBox('Off-Hour Activity', '25 pts', '#f59e0b', 'Ratio of commits made before 9am or after 6pm Bangladesh Time, including weekends (Friday & Saturday).')}
           ${scoreFactorBox('Workload Spikes', '20 pts', '#ef4444', 'Weeks where commit volume exceeds 2× the developer\'s own rolling average.')}
           ${scoreFactorBox('Negative Sentiment', '20 pts', '#a855f7', 'Keyword-based proxy: stress words (fix, bug, urgent) vs positive words in messages.')}
           ${scoreFactorBox('Code Intensity', '20 pts', '#3b82f6', 'Total lines added + deleted normalized per period (>1000 lines = max score).')}
