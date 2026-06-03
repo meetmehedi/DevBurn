@@ -416,7 +416,8 @@ async function runAnalysis(owner: string, repo: string) {
   `;
 
   try {
-    const url = `http://localhost:3000/api/burnout/team/${owner}/${repo}`;
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const url = `${baseUrl}/api/burnout/team/${owner}/${repo}`;
     const response = await fetch(url);
     if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
 
@@ -441,7 +442,7 @@ async function runAnalysis(owner: string, repo: string) {
       teamList2.innerHTML = `
         <div style="text-align:center;color:#ef4444;padding:2rem">
           <div style="font-size:2rem;margin-bottom:0.5rem">❌</div>
-          <div>Error fetching data. Is the backend running on port 3000?</div>
+          <div>Error fetching data. Could not connect to the backend server.</div>
           <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem">${(error as Error).message}</div>
         </div>
       `;
